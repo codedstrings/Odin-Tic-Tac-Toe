@@ -1,3 +1,4 @@
+let isFirstLoad = true;
 // gamboard -- IIFE
 const Gameboard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""]; //kept private
@@ -10,7 +11,11 @@ const Gameboard = (() => {
       }
   };
 
-  return { getBoard, updateBoard };
+  const resetBoard = () => {
+      board.fill("");
+  };
+
+  return { getBoard, updateBoard, resetBoard };
 })();
 
 // This is Factory Function
@@ -25,12 +30,14 @@ const Game = (() => {
   let isGameOver = false;
 
   const startGame = (player1Name, player2Name) => {
+      isFirstLoad = false;
       player1 = Player(player1Name, "X");
       player2 = Player(player2Name, "O");
       currentPlayer = player1;
       isGameOver = false;
-      Gameboard.getBoard().fill("");
-      console.log("Game started!");
+      Gameboard.resetBoard();
+      DisplayController.render();
+      DisplayController.setMessage(`${currentPlayer.name}'s turn`);
   };
 
   const switchPlayer = () => {
@@ -71,13 +78,51 @@ const Game = (() => {
           Gameboard.updateBoard(index, currentPlayer.marker);
           const result = checkWin();
           if (result) {
-              console.log(result);
+              DisplayController.setMessage(result);
           } else {
               switchPlayer();
+              DisplayController.setMessage(`${currentPlayer.name}'s turn`);
           }
+          DisplayController.render();
       }
   };
 
   return { startGame, makeMove, getCurrentPlayer: () => currentPlayer };
 })();
 
+// Display Controller Module (IIFE)
+const DisplayController = (() => {
+  const gameboardElement = document.getElementById("gameboard");
+  const messageElement = document.getElementById("message");
+  const restartButton = document.getElementById("restart-button");
+
+  const render = () => {
+      gameboardElement.innerHTML = "";
+      const board = Gameboard.getBoard();
+      board.forEach((cell, index) => {
+          const cellElement = document.createElement("div");
+          cellElement.classList.add("cell");
+          cellElement.textContent = cell;
+          cellElement.addEventListener("click", () => Game.makeMove(index));
+          gameboardElement.appendChild(cellElement);
+      });
+      if(!isFirstLoad){
+        restartButton.innerText = 'Restart Button'
+      }
+  };
+
+  const setMessage = (message) => {
+      messageElement.textContent = message;
+  };
+
+  restartButton.addEventListener("click", () => {
+      const player1Name = prompt("Enter name for Player 1 (X):", "Player 1");
+      const player2Name = prompt("Enter name for Player 2 (O):", "Player 2");
+      Game.startGame(player1Name, player2Name);
+  });
+
+  return { render, setMessage };
+})();
+
+// Start the game initially with default names
+// Game.startGame("Player 1", "Player 2");
