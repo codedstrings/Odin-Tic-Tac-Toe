@@ -1,15 +1,17 @@
 :root{
   --cell-hover: rgba(184, 177, 177, 0.248);
   --cell-active: rgba(163, 157, 157, 0.514);
+  --player1: #e0f7fa;
+  --player2: #fff9c4;
 }
 
 body {
+  background-color: var(--player1);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
   margin: 0;
 }
 
@@ -31,7 +33,7 @@ body {
   align-items: center;
   width: 100px;
   height: 100px;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   border: 1px solid #000000;
   font-size: 2rem;
   cursor: pointer;
@@ -51,4 +53,11 @@ body {
 #message {
   margin-top: 20px;
   font-size: 1.2rem;
+}
+.player1 {
+  background-color: var(--player1); /* Light blue for Player 1 */
+}
+
+.player2 {
+  background-color: var(--player2); /* Light yellow for Player 2 */
 }
