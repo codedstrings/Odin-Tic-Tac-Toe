@@ -1,3 +1,8 @@
+:root{
+  --cell-hover: rgba(184, 177, 177, 0.248);
+  --cell-active: rgba(163, 157, 157, 0.514);
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -31,7 +36,12 @@ body {
   font-size: 2rem;
   cursor: pointer;
 }
-
+.cell:hover{
+  background-color: var(--cell-hover)
+}
+.cell:active{
+  background-color: var(--cell-active)
+}
 #restart-button {
   padding: 10px 20px;
   font-size: 1rem;
