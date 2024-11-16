@@ -37,13 +37,14 @@ const Game = (() => {
     isGameOver = false;
     Gameboard.resetBoard();
     DisplayController.render();
+    DisplayController.switchColoring(currentPlayer);
     DisplayController.setMessage(`${currentPlayer.name}'s turn`);
   };
 
   const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
+    DisplayController.switchColoring(currentPlayer);
   };
-
   const checkWin = () => {
     const board = Gameboard.getBoard();
     const winConditions = [
@@ -96,6 +97,13 @@ const DisplayController = (() => {
   const messageElement = document.getElementById("message");
   const restartButton = document.getElementById("restart-button");
 
+  const switchColoring = (currentPlayer) => {
+    const htmlbody = document.querySelector('body');
+    htmlbody.classList.remove("player1", "player2");
+    const className = currentPlayer.marker === "X" ? "player1" : "player2";
+    htmlbody.classList.add(className);
+  };
+
   const render = () => {
     gameboardWrapper.innerHTML = "";
     const gameboardElement = document.createElement("div");
@@ -125,7 +133,7 @@ const DisplayController = (() => {
     Game.startGame(player1Name, player2Name);
   });
 
-  return { render, setMessage };
+  return { render, setMessage, switchColoring };
 })();
 
 // Start the game initially with default names
